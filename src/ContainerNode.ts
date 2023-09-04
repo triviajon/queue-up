@@ -1,17 +1,17 @@
-import { ContainerNodeData } from "./ContainerNodeData";
+import { IContainerNodeData } from "./IContainerNodeData";
 
-export class ContainerNode<T> {
-    data: ContainerNodeData<T>;
-    next: ContainerNode<T> | null;
+export class ContainerNode<T extends IContainerNodeData<U>, U> {
+    data: T;
+    next: ContainerNode<T, U> | null;
 
-    constructor(data: ContainerNodeData<T>) {
+    constructor(data: T) {
         this.data = data;
         this.next = null;
     }
 
-    public equalsValue(that: ContainerNode<T>): boolean {
+    public equalsValue(that: ContainerNode<T, U>): boolean {
         if (this.next !== null && that.next !== null) {
-            return this.data.equalsValue(that.data) && this.next.equalsValue(that.next);  
+            return this.data.equalsValue(that.data) && this.next.equalsValue(that.next);
         } else if (this.next === null && that.next === null) {
             return this.data.equalsValue(that.data);
         } else {
@@ -20,16 +20,15 @@ export class ContainerNode<T> {
     }
 }
 
-
-export function ContainerNodeDataCopy<T>(node: ContainerNode<T>): ContainerNode<T> {
+export function ContainerNodeDataCopy<T extends IContainerNodeData<U>, U>(node: ContainerNode<T, U>): ContainerNode<T, U> {
     /**
-     * Copys data from one ContainerNode to a new ContainerNode object.
+     * Copies data from one ContainerNode to a new ContainerNode object.
      * 
      * Arguments:
-     *  node (ContainerNode<T>): the src node to copy from
+     *  node (ContainerNode<T, U>): the source node to copy from
      * 
      * Returns:
-     *  ContainerNode<T>: the new node with copied data
+     *  ContainerNode<T, U>: the new node with copied data
      */
-    return new ContainerNode<T>(node.data);
+    return new ContainerNode<T, U>(node.data);
 }
