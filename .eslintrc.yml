@@ -10,6 +10,8 @@ parserOptions:
   sourceType: module
 plugins:
   - '@typescript-eslint'
+ignorePatterns:
+ ["**/dist/*.js"]
 rules:
   indent:
     - error

@@ -1,4 +1,4 @@
-import { ContainerNode } from "./ContainerNode";
+import { ContainerNode, ContainerNodeDataCopy } from "./ContainerNode";
 import { IContainer } from "./IContainer";
 
 /**
@@ -17,20 +17,37 @@ export class FIFO<T> implements IContainer<T> {
    */
     constructor(initNode: ContainerNode<T> | null) {
         this.start = initNode;
-        this.end = null;
+        this.end = initNode;
     }
 
     /**
    * @inheritdoc
    */
     public enqueue(node: ContainerNode<T>): void {
-        throw new Error("Not Implemented Yet.");
+        const copiedNode = ContainerNodeDataCopy(node);
+
+        if (this.start === null) {
+            this.start = copiedNode;
+            this.end = copiedNode;
+        } else {
+            this.end!.next = copiedNode;
+            this.end = copiedNode;
+        }
     }
 
     /**
    * @inheritdoc
    */
     public dequeue(): ContainerNode<T> | null {
-        throw new Error("Not Implemented Yet.");
+        const dequeuedNode = this.start;
+
+        if (dequeuedNode !== null && dequeuedNode.next === null) {
+            this.start = null;
+            this.end = null;
+        } else if (dequeuedNode !== null) {
+            this.start = dequeuedNode.next;
+        }
+
+        return dequeuedNode;
     }
 }
